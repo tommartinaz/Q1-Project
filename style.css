@@ -1,0 +1,88 @@
+body {
+  margin: 0px;
+  padding: 0px;
+}
+.container {
+  position: relative;
+  margin: 0px;
+  padding: 0px;
+  height: 100vh;
+  width: 100vw;
+  background-color: #15692D;
+}
+.phase2Left {
+  height: 100%;
+  background-color: red;
+}
+.rows {
+  position: relative;
+  display: inline-block;
+}
+#playArea {
+  height: 80%;
+  position: relative;
+}
+#player1{
+
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  margin: 0, 5px;
+  height: 120px;
+  width: 100%;
+
+}
+
+#player2{
+  position: absolute;
+  top: 70%;
+  left: 10%;
+  margin: 0, 5px;
+  height: 120px;
+  width: 100%;
+
+}
+/*
+#p1s1 {
+  position: relative;
+  transition: 0.6s;
+	transform-style: preserve-3d;
+}
+
+.front, .back {
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.front {
+  z-index: 2;
+  transform: rotateY(0deg);
+  height: 225px;
+  width: 150px;
+}
+.back {
+  transform: rotateY(180deg);
+}
+*/
+.rowCards {
+  background-image: url('images/card_back.jpg');
+  width: 175px;
+  height: 260px;
+  background-size: cover;
+  margin: 0px 18px;
+}
+img {
+  width: 120px;
+  height: 220px;
+}
+.phase2ButtonRow {
+  position: absolute;
+  top: 90%;
+  left: 33%;
+}
+.phs2Btn {
+  text-align: center;
+  width: 200px;
+  margin: 0px 10px;
+}
