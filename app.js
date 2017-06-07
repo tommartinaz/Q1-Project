@@ -28,7 +28,7 @@ $.get("https://deckofcardsapi.com/api/deck/" + deckID + "/shuffle/").done(functi
     $.get("https://deckofcardsapi.com/api/deck/" + deckID + "/draw/?count=1").done(function(data) {
       //var cardArray = data.cards;
       //console.log(cardArray);
-      $("#p1s1").css('background-image', 'url(' + data.cards[0].image + ')');
+      $("#p1s1").css({'background-image': 'url(' + data.cards[0].image + ')','border':'3px solid blue','border-radius': '10px'});
       curVal = deckMapping[data.cards[0].value];
       player1.push(curVal);
       console.log(curVal);
@@ -50,7 +50,7 @@ $.get("https://deckofcardsapi.com/api/deck/" + deckID + "/shuffle/").done(functi
   $("#begin").click(begin);
   var redrawCardBacks = function(slot) {
     for (var j = (slot || 2); j < 6; j++) {
-      $("#p1s" + j).css('background-image', 'url("images/card_back.jpg")');
+      $("#p1s" + j).css({'background-image': 'url("images/card_back.jpg")'});
     };
   };
 
@@ -83,7 +83,9 @@ $.get("https://deckofcardsapi.com/api/deck/" + deckID + "/shuffle/").done(functi
         break;
       case "freeze":
         console.log("Frozen");
+        $(".rowCards").css('border', 'none');
         frozenIndex += tempIndex;
+        $("#p1s" + (frozenIndex+1)).css({'border':'3px solid blue','border-radius': '10px'});
         tempIndex = 0;
         break;
       case "replace":

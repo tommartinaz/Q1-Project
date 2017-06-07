@@ -42,29 +42,13 @@ body {
   width: 100%;
 
 }
-/*
-#p1s1 {
+.main {
+  height: 100%;
   position: relative;
-  transition: 0.6s;
-	transform-style: preserve-3d;
+  color: white;
+  font-size: 60px;
+  text-align: center;
 }
-
-.front, .back {
-  backface-visibility: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-.front {
-  z-index: 2;
-  transform: rotateY(0deg);
-  height: 225px;
-  width: 150px;
-}
-.back {
-  transform: rotateY(180deg);
-}
-*/
 .rowCards {
   background-image: url('images/card_back.jpg');
   width: 175px;
@@ -85,4 +69,9 @@ img {
   text-align: center;
   width: 200px;
   margin: 0px 10px;
+}
+#startGame {
+  position: absolute;
+  top: 60%;
+  left: 45%;
 }
