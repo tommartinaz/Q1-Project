@@ -2,6 +2,7 @@ body {
   margin: 0px;
   padding: 0px;
 }
+
 .container {
   position: relative;
   margin: 0px;
@@ -10,38 +11,51 @@ body {
   width: 100vw;
   background-color: #15692D;
 }
+
 .phase2Left {
   height: 100%;
-  background-color: red;
+  position: relative;
 }
+
+#cardInfo {
+  height: 40%;
+  position: absolute;
+  display: inline-block;
+  margin: 0px auto;
+  top: 40%;
+  left: 10%;
+  width: 80%;
+  background-repeat: no-repeat;
+}
+
 .rows {
   position: relative;
   display: inline-block;
 }
+
 #playArea {
   height: 80%;
   position: relative;
 }
-#player1{
 
+#player1 {
   position: absolute;
   top: 20%;
   left: 10%;
   margin: 0, 5px;
   height: 120px;
-  width: 100%;
-
+  width: 85%;
 }
 
-#player2{
+#player2 {
   position: absolute;
   top: 70%;
   left: 10%;
   margin: 0, 5px;
   height: 120px;
-  width: 100%;
-
+  width: 85%;
 }
+
 .main {
   height: 100%;
   position: relative;
@@ -49,27 +63,33 @@ body {
   font-size: 60px;
   text-align: center;
 }
+
 .rowCards {
   background-image: url('images/card_back.jpg');
-  width: 175px;
-  height: 260px;
-  background-size: cover;
+  width: 169px;
+  height: 235px;
+  background-size: contain;
+  background-repeat: no-repeat;
   margin: 0px 18px;
 }
+/*
 img {
   width: 120px;
   height: 220px;
 }
+*/
 .phase2ButtonRow {
   position: absolute;
   top: 90%;
-  left: 33%;
+  left: 36%;
 }
+
 .phs2Btn {
   text-align: center;
   width: 200px;
   margin: 0px 10px;
 }
+
 #startGame {
   position: absolute;
   top: 60%;

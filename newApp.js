@@ -22,6 +22,7 @@ function Player(id, name, deck) {
     this.name = name;
     this.deck = deck;
     this.cardArray = [];
+    this.replaceable = true;
     this.frozenIndex = 0;
     this.rowID = "#p" + id + "s";
 };
@@ -45,7 +46,7 @@ function Deck(deckID) {
 
                 curVal = deckMapping[data.cards[0].value];
                 this.curCard = data.cards[0];
-                console.log(this.curCard)
+                //               console.log(this.curCard)
 
             }
         })
@@ -87,12 +88,16 @@ $("#begin").click(function () {
         curPlayer.cardArray.push(deckMapping[curPlayer.deck.curCard.value]);
         console.log(curPlayer.cardArray);
         drawCardsOnScreen(curPlayer, curCard, 1);
+        $(curPlayer.rowID + 1).css({
+            'border': '3px solid blue',
+            'border-radius': '10px'
+        });
     });
 })
 
 $(".phs2Btn").click(function () {
     console.log($(event.target));
-    
+
     var btnValue = $(event.target).attr("value");
     var cardSlot = curPlayer.frozenIndex + 1 + tempIndex;
     switch (btnValue) {
@@ -100,15 +105,16 @@ $(".phs2Btn").click(function () {
         case "lower":
             curPlayer.deck.drawCard().then(function () {
                 curPlayer.cardArray.push(deckMapping[curPlayer.deck.curCard.value]);
-                console.log(curPlayer.cardArray);
-                drawCardsOnScreen(curPlayer, curCard, cardSlot+1);
+                drawCardsOnScreen(curPlayer, curCard, cardSlot + 1);
                 //console.log("btnValue is: " + btnValue + "\ncurVal is: " + curVal + "\nnext card val is: " + nextCardVal);
                 if (compareCards(curPlayer.cardArray, curPlayer.frozenIndex + tempIndex, btnValue)) {
                     tempIndex++;
+                    $("#cardInfo").css("background-image", "none");
                 } else {
                     tempIndex = 0;
                     redrawCardBacks(curPlayer, curPlayer.frozenIndex + 2);
                     curPlayer.cardArray = curPlayer.cardArray.slice(0, curPlayer.frozenIndex + 1);
+                    $("#cardInfo").css("background-image", "url('" + curCard.image + "')");
                 }
                 console.log(tempIndex);
             });
@@ -122,18 +128,20 @@ $(".phs2Btn").click(function () {
                 'border': '3px solid blue',
                 'border-radius': '10px'
             });
+            curPlayer.replaceable = true;
             tempIndex = 0;
             break;
         case "replace":
             console.log("Replacing");
-            if (tempIndex > 0) {
-                alert("Sorry, you cannot replace the frozen card once you've success");
+            if (tempIndex > 0 || curPlayer.replaceable === false) {
+                alert("Sorry, you can only replace the frozen card, and only once per turn in this phase.");
                 break;
             } else {
                 curPlayer.deck.drawCard().then(function () {
                     curPlayer.cardArray[curPlayer.frozenIndex] = deckMapping[curPlayer.deck.curCard.value];
                     console.log(curPlayer.cardArray);
-                    drawCardsOnScreen(curPlayer, curCard, curPlayer.frozenIndex+1);
+                    curPlayer.replaceable = false;
+                    drawCardsOnScreen(curPlayer, curCard, curPlayer.frozenIndex + 1);
                 });
                 break;
             }
@@ -143,5 +151,6 @@ $(".phs2Btn").click(function () {
 
 var player1 = new Player(1, prompt("Please enter the name of player 1", "Player1"), new Deck('268n4fwya9nq'));
 var player2 = new Player(2, prompt("Please enter the name of player 2", "Player2"), new Deck("gzajszt1jhvy"));
+
 curPlayer = player2;
-console.log(player1, player2);
+//console.log(player1, player2);
