@@ -78,6 +78,7 @@ function resetCards(player) {
     redrawCardBacks(player2, 1);
     $(".rowCards").css("border", "none");
     $("#begin").show();
+    $(".phs2Btn").hide();
 };
 
 function drawCardsOnScreen(player, card, slot) {
