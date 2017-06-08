@@ -14,7 +14,7 @@ const deckMapping = {
     "2": 2
 }
 var curPlayer;
-var curVal;
+//var curVal;
 var tempIndex = 0;
 
 function Player(id, name, deck) {
@@ -25,7 +25,14 @@ function Player(id, name, deck) {
     this.replaceable = true;
     this.frozenIndex = 0;
     this.rowID = "#p" + id + "s";
+    this.rounds = 0;
 };
+
+function Game() {
+    this.player1 = new Player(1, prompt("Please enter the name of player 1", "Player1"), new Deck('268n4fwya9nq'));
+    this.player2 = new Player(2, prompt("Please enter the name of player 2", "Player2"), new Deck("gzajszt1jhvy"));
+    this.state = true;
+}
 
 function Deck(deckID) {
     this.curCard = 0;
@@ -44,7 +51,7 @@ function Deck(deckID) {
             success: function (data) {
                 curCard = data.cards[0];
 
-                curVal = deckMapping[data.cards[0].value];
+//                curVal = deckMapping[data.cards[0].value];
                 this.curCard = data.cards[0];
                 //               console.log(this.curCard)
 
@@ -52,6 +59,24 @@ function Deck(deckID) {
         })
     }
 }
+
+function resetCards(player) {
+    player.rounds++;
+    player1.frozenIndex = 0;
+    player1.cardArray = [];
+    player1.replaceable = true;
+    //player1.deck.shuffle();
+    player2.frozenIndex = 0;
+    player2.cardArray = [];
+    player2.replaceable = true;
+    tempIndex = 0;
+    //player2.deck.shuffle();
+    //curVal
+    redrawCardBacks(player1, 1);
+    redrawCardBacks(player2, 1);
+    $(".rowCards").css("border", "none");
+    $("#begin").show();
+};
 
 function drawCardsOnScreen(player, card, slot) {
 
@@ -71,28 +96,46 @@ function redrawCardBacks(player, slot) {
 
 function compareCards(arr, indx, btn) {
     if (btn === "higher" && arr[indx] < arr[indx + 1] || btn === "lower" && arr[indx] > arr[indx + 1]) {
-        alert("That's right!");
+        //alert("That's right!");
         indx++;
         return indx;
     } else {
-        alert("Sorry, wrong answer");
+        //alert("Sorry, wrong answer");
         return 0;
     }
 }
 
 
 
-$("#begin").click(function () {
-    curPlayer.deck.shuffle();
-    curPlayer.deck.drawCard().then(function () {
-        curPlayer.cardArray.push(deckMapping[curPlayer.deck.curCard.value]);
-        console.log(curPlayer.cardArray);
-        drawCardsOnScreen(curPlayer, curCard, 1);
-        $(curPlayer.rowID + 1).css({
+
+
+function beginRow(player) {
+    if (player.cardArray.length===0) {
+        player.deck.shuffle();
+    };
+    player.deck.drawCard().then(function () {
+        player.cardArray.push(deckMapping[player.deck.curCard.value]);
+        console.log(player.cardArray);
+        drawCardsOnScreen(player, curCard, 1);
+        $(player.rowID + 1).css({
             'border': '3px solid blue',
             'border-radius': '10px'
         });
+
     });
+};
+$("#begin").click(function () {
+    var firstUp = Math.floor(Math.random() * 2);
+    alert("in begin click function");
+    if (firstUp < 1) {
+        curPlayer = player1;
+    } else {
+        curPlayer = player2;
+    }
+    console.log(curPlayer.id, curPlayer.cardArray);
+    beginRow(curPlayer);
+
+    $("#begin").hide();
 })
 
 $(".phs2Btn").click(function () {
@@ -110,11 +153,23 @@ $(".phs2Btn").click(function () {
                 if (compareCards(curPlayer.cardArray, curPlayer.frozenIndex + tempIndex, btnValue)) {
                     tempIndex++;
                     $("#cardInfo").css("background-image", "none");
+                    if (curPlayer.cardArray.length === 5) {
+                        alert(curPlayer.name + " wins!");
+                        resetCards(curPlayer);
+                    }
                 } else {
                     tempIndex = 0;
                     redrawCardBacks(curPlayer, curPlayer.frozenIndex + 2);
                     curPlayer.cardArray = curPlayer.cardArray.slice(0, curPlayer.frozenIndex + 1);
                     $("#cardInfo").css("background-image", "url('" + curCard.image + "')");
+                    if (curPlayer.id === 1) {
+                        curPlayer = player2;
+                    } else {
+                        curPlayer = player1;
+                    }
+                    if (curPlayer.cardArray.length === 0) {
+                        beginRow(curPlayer);
+                    };
                 }
                 console.log(tempIndex);
             });
@@ -122,7 +177,7 @@ $(".phs2Btn").click(function () {
             break;
         case "freeze":
             console.log("Frozen");
-            $(".rowCards").css('border', 'none');
+            $(".rowCards" + curPlayer.id).css('border', 'none');
             curPlayer.frozenIndex += tempIndex;
             $(curPlayer.rowID + (curPlayer.frozenIndex + 1)).css({
                 'border': '3px solid blue',
@@ -147,10 +202,11 @@ $(".phs2Btn").click(function () {
             }
     };
 
+
+
 });
 
-var player1 = new Player(1, prompt("Please enter the name of player 1", "Player1"), new Deck('268n4fwya9nq'));
-var player2 = new Player(2, prompt("Please enter the name of player 2", "Player2"), new Deck("gzajszt1jhvy"));
+player1 = new Player(1, prompt("Please enter the name of player 1", "Player1"), new Deck('268n4fwya9nq'));
+player2 = new Player(2, prompt("Please enter the name of player 2", "Player2"), new Deck("gzajszt1jhvy"));
 
-curPlayer = player2;
 //console.log(player1, player2);

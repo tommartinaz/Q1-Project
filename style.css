@@ -64,7 +64,7 @@ body {
   text-align: center;
 }
 
-.rowCards {
+.rowCards1, .rowCards2 {
   background-image: url('images/card_back.jpg');
   width: 169px;
   height: 235px;
