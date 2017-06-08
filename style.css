@@ -20,12 +20,12 @@ body {
 #cardInfo {
   height: 40%;
   position: absolute;
-  display: inline-block;
   margin: 0px auto;
   top: 40%;
   left: 10%;
   width: 80%;
-  background-repeat: no-repeat;
+  color: white;
+  font-size: 20px;
 }
 
 .rows {
@@ -72,6 +72,12 @@ body {
   background-repeat: no-repeat;
   margin: 0px 18px;
 }
+.rowCards2 {
+  background-image: url('images/The_Spoils_back.jpg');
+  background-size: contain;
+}
+
+
 /*
 img {
   width: 120px;
@@ -82,12 +88,14 @@ img {
   position: absolute;
   top: 90%;
   left: 36%;
+  
 }
 
 .phs2Btn {
   text-align: center;
   width: 200px;
   margin: 0px 10px;
+  display: none;
 }
 
 #startGame {

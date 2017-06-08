@@ -1,29 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Card Sharks!</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ=="
-        crossorigin="anonymous">
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX"
-        crossorigin="anonymous">
+  <meta charset="utf-8">
+  <title>Card Sharks!</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ=="
+    crossorigin="anonymous">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX"
+    crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+  <script src='newapp.js' defer></script>
 
-    <link rel="stylesheet" href="style.css">
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-        crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="style.css">
 
-    <script src='newApp.js' defer></script>
 </head>
 
 <body>
-    <div class="container">
-        <div class="main">Welcome to Card Sharks!<button id="startGame" type="button" class="btn btn-info btn-lg">Start a new game</button></div>
+  <div class="container">
+    <section class="phase2Left col-md-3">
+      <button type="button" id="begin" name="button">Test of first card</button>
+      <div id="cardInfo"></div>
+    </section>
+    <div id="playArea" class="col-md-9">
 
+      <div id="player1" class="row">
+        <div id="p1s1" class="rowCards rowCards1 col-md-2 col-md-offset-1">
+        </div>
+        <div id="p1s2" class="rowCards rowCards1 col-md-2"></div>
+        <div id="p1s3" class="rowCards rowCards1 col-md-2"></div>
+        <div id="p1s4" class="rowCards rowCards1 col-md-2"></div>
+        <div id="p1s5" class="rowCards rowCards1 col-md-2"></div>
+      </div>
+      <div id="player2" class="row" label="Player 2">
+        <div id="p2s1" class="rowCards rowCards2 col-md-2 col-md-offset-1"></div>
+        <div id="p2s2" class="rowCards rowCards2 col-md-2"></div>
+        <div id="p2s3" class="rowCards rowCards2 col-md-2"></div>
+        <div id="p2s4" class="rowCards rowCards2 col-md-2"></div>
+        <div id="p2s5" class="rowCards rowCards2 col-md-2"></div>
+      </div>
     </div>
+    <div class="phase2ButtonRow">
+      <button type="button" class="phs2Btn" name="button" value="higher">Higher</button>
+      <button type="button" class="phs2Btn" name="button" value="lower">Lower</button>
+      <button type="button" class="phs2Btn" name="button" value="freeze">Freeze</button>
+      <button type="button" class="phs2Btn" name="button" value="replace">Replace frozen card</button>
+    </div>
+  </div>
 </body>
 
 </html>

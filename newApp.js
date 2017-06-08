@@ -16,6 +16,8 @@ const deckMapping = {
 var curPlayer;
 //var curVal;
 var tempIndex = 0;
+var guesserID = 0;
+var counter = 1;
 
 function Player(id, name, deck) {
     this.id = id;
@@ -51,7 +53,7 @@ function Deck(deckID) {
             success: function (data) {
                 curCard = data.cards[0];
 
-//                curVal = deckMapping[data.cards[0].value];
+                //                curVal = deckMapping[data.cards[0].value];
                 this.curCard = data.cards[0];
                 //               console.log(this.curCard)
 
@@ -87,10 +89,16 @@ function drawCardsOnScreen(player, card, slot) {
 
 function redrawCardBacks(player, slot) {
     for (var j = (slot || 2); j < 6; j++) {
-        $(player.rowID + j).css({
-            'background-image': 'url("images/card_back.jpg")'
-        });
-    };
+        if (player.id === 1) {
+            $(player.rowID + j).css({
+                'background-image': 'url("images/card_back.jpg")'
+            });
+        } else {
+            $(player.rowID + j).css({
+                'background-image': 'url("images/The_Spoils_back.jpg")'
+            })
+        };
+    }
 };
 
 
@@ -105,14 +113,18 @@ function compareCards(arr, indx, btn) {
     }
 }
 
-
+function checkForWinner(player) {
+    if (player.cardArray.length === 5) {
+        alert(player.name + " wins this round!");
+        resetCards(player);
+    }
+}
 
 
 
 function beginRow(player) {
-    if (player.cardArray.length===0) {
-        player.deck.shuffle();
-    };
+
+    player.deck.shuffle();
     player.deck.drawCard().then(function () {
         player.cardArray.push(deckMapping[player.deck.curCard.value]);
         console.log(player.cardArray);
@@ -125,19 +137,37 @@ function beginRow(player) {
     });
 };
 $("#begin").click(function () {
-    var firstUp = Math.floor(Math.random() * 2);
-    alert("in begin click function");
-    if (firstUp < 1) {
-        curPlayer = player1;
+    $("#cardInfo").text('');
+    var ranNum = Math.floor(Math.random() * 100 + 1);
+    guesserID++;
+    if (guesserID % 2 === 1) {
+        guessVal = prompt(player1.name + ", please guess a number between 1 and 100.");
+        guessValOther = prompt(player2.name + ", " + player1.name + "'s guess was " + guessVal + ". Do you think the number is higher or lower than that?");
+        if ((ranNum < guessVal && guessValOther === "lower") || (ranNum > guessVal && guessValOther === "higher")) {
+            alert(player2.name + ", the actual number was " + ranNum + ". You go first");
+            curPlayer = player2;
+        } else {
+            alert(player1.name + ", the actual number was " + ranNum + ". You go first");
+            curPlayer = player1;
+        }
     } else {
-        curPlayer = player2;
+        guessVal = prompt(player2.name + ", please guess a number between 1 and 100.");
+        guessValOther = prompt(player1.name + ", " + player2.name + "'s guess was " + guessVal + ". Do you think the number is higher or lower than that?");
+        if ((ranNum < guessVal && guessValOther === "lower") || (ranNum > guessVal && guessValOther === "higher")) {
+            alert(player1.name + ", the actual number was " + ranNum + ". You go first");
+            curPlayer = player1;
+        } else {
+            alert(player2.name + ", the actual number was " + ranNum + ". You go first");
+            curPlayer = player2;
+        }
     }
-    console.log(curPlayer.id, curPlayer.cardArray);
-    beginRow(curPlayer);
+    if (curPlayer.cardArray.length === 0) {
+        beginRow(curPlayer);
+    }
+    $(".phs2Btn").show();
 
     $("#begin").hide();
 })
-
 $(".phs2Btn").click(function () {
     console.log($(event.target));
 
@@ -147,33 +177,45 @@ $(".phs2Btn").click(function () {
         case "higher":
         case "lower":
             curPlayer.deck.drawCard().then(function () {
-                curPlayer.cardArray.push(deckMapping[curPlayer.deck.curCard.value]);
                 drawCardsOnScreen(curPlayer, curCard, cardSlot + 1);
+                curPlayer.cardArray.push(deckMapping[curPlayer.deck.curCard.value]);
                 //console.log("btnValue is: " + btnValue + "\ncurVal is: " + curVal + "\nnext card val is: " + nextCardVal);
+
                 if (compareCards(curPlayer.cardArray, curPlayer.frozenIndex + tempIndex, btnValue)) {
                     tempIndex++;
-                    $("#cardInfo").css("background-image", "none");
-                    if (curPlayer.cardArray.length === 5) {
-                        alert(curPlayer.name + " wins!");
-                        resetCards(curPlayer);
-                    }
+                    $("#cardInfo").text('');
+                    checkForWinner(curPlayer);
                 } else {
                     tempIndex = 0;
+                    counter++;
                     redrawCardBacks(curPlayer, curPlayer.frozenIndex + 2);
                     curPlayer.cardArray = curPlayer.cardArray.slice(0, curPlayer.frozenIndex + 1);
-                    $("#cardInfo").css("background-image", "url('" + curCard.image + "')");
-                    if (curPlayer.id === 1) {
-                        curPlayer = player2;
-                    } else {
-                        curPlayer = player1;
+                    switch (true) {
+                        case (counter < 3):
+                            if (curPlayer.id === 1) {
+                                $("#cardInfo").text(`Sorry ${curPlayer.name}, the actual card drawn was the ${curCard.value} of ${curCard.suit}. It is now ${player2.name}'s turn`);
+                                curPlayer = player2;
+                            } else {
+                                $("#cardInfo").text(`Sorry ${curPlayer.name}, the actual card drawn was the ${curCard.value} of ${curCard.suit}. It is now ${player1.name}'s turn`);
+                                curPlayer = player1;
+                            }
+                            break;
+                        case (counter === 3):
+                            $("#cardInfo").text(`Sorry ${curPlayer.name}, the actual card drawn was the ${curCard.value} of ${curCard.suit}.`);
+                            counter = 1;
+                            $("#begin").show();
+                            $(".phs2Btn").hide();
+                            break;
                     }
+                    curPlayer.replaceable = true;
+
                     if (curPlayer.cardArray.length === 0) {
                         beginRow(curPlayer);
                     };
+
                 }
                 console.log(tempIndex);
             });
-
             break;
         case "freeze":
             console.log("Frozen");
@@ -185,6 +227,9 @@ $(".phs2Btn").click(function () {
             });
             curPlayer.replaceable = true;
             tempIndex = 0;
+            counter = 1;
+            $(".phs2Btn").hide();
+            $("#begin").show();
             break;
         case "replace":
             console.log("Replacing");
@@ -198,12 +243,9 @@ $(".phs2Btn").click(function () {
                     curPlayer.replaceable = false;
                     drawCardsOnScreen(curPlayer, curCard, curPlayer.frozenIndex + 1);
                 });
-                break;
             }
-    };
-
-
-
+            break;
+    }
 });
 
 player1 = new Player(1, prompt("Please enter the name of player 1", "Player1"), new Deck('268n4fwya9nq'));
