@@ -114,17 +114,17 @@ function compareCards(arr, indx, btn) {
 
 function checkForWinner(player) {
     if (player.cardArray.length === 5) {
+        counter = 1;
         $("#cardInfo").text(player.name + " wins this round!");
         $(".phs2Btn").hide();
         $("#reset").show();
-        $("#reset").click(function() {
+        $("#reset").click(function () {
             resetCards(player);
         })
     }
 }
 
 function beginRow(player) {
-
     player.deck.shuffle();
     player.deck.drawCard().then(function () {
         player.cardArray.push(deckMapping[player.deck.curCard.value]);
@@ -140,7 +140,10 @@ function beginRow(player) {
 function rowOutline(player) {
     $("#player1").css("border", "none");
     $("#player2").css("border", "none");
-    $("#player" + player.id).css({"border": "1px solid red", "border-radius": "10px"});
+    $("#player" + player.id).css({
+        "border": "1px solid red",
+        "border-radius": "10px"
+    });
 }
 
 $("#begin").click(function () {
@@ -151,11 +154,9 @@ $("#begin").click(function () {
         guessVal = prompt(player1.name + ", please guess a number between 1 and 100.");
         guessValOther = prompt(player2.name + ", " + player1.name + "'s guess was " + guessVal + ". Do you think the number is higher or lower than that?");
         if ((ranNum < guessVal && guessValOther === "lower") || (ranNum > guessVal && guessValOther === "higher")) {
-            $("#cardInfo").text(`The actual number was ${ranNum}. ${player2.name} goes first.`);
             curPlayer = player2;
             rowOutline(curPlayer);
         } else {
-            $("#cardInfo").text(`The actual number was ${ranNum}. ${player1.name} goes first.`);
             curPlayer = player1;
             rowOutline(curPlayer);
         }
@@ -163,11 +164,9 @@ $("#begin").click(function () {
         guessVal = prompt(player2.name + ", please guess a number between 1 and 100.");
         guessValOther = prompt(player1.name + ", " + player2.name + "'s guess was " + guessVal + ". Do you think the number is higher or lower than that?");
         if ((ranNum < guessVal && guessValOther === "lower") || (ranNum > guessVal && guessValOther === "higher")) {
-            $("#cardInfo").text(`The actual number was ${ranNum}. ${player1.name} goes first.`);
             curPlayer = player1;
             rowOutline(curPlayer);
         } else {
-            $("#cardInfo").text(`The actual number was ${ranNum}. ${player2.name} goes first.`);
             curPlayer = player2;
             rowOutline(curPlayer);
         }
@@ -176,6 +175,7 @@ $("#begin").click(function () {
         beginRow(curPlayer);
         rowOutline(curPlayer);
     }
+    $("#cardInfo").text(`The actual number was ${ranNum}. ${curPlayer.name} goes first.`);
     $(".phs2Btn").show();
 
     $("#begin").hide();
@@ -202,29 +202,28 @@ $(".phs2Btn").click(function () {
                     redrawCardBacks(curPlayer, curPlayer.frozenIndex + 2);
                     curPlayer.cardArray = curPlayer.cardArray.slice(0, curPlayer.frozenIndex + 1);
                     curPlayer.replaceable = true;
-                    switch (true) {
-                        case (counter < 3):
-                            if (curPlayer.id === 1) {
-                                $("#cardInfo").text(`Sorry ${curPlayer.name}, the actual card drawn was the ${curCard.value} of ${curCard.suit}. It is now ${player2.name}'s turn`);
-                                curPlayer = player2;
-                                rowOutline(curPlayer);
-                            } else {
-                                $("#cardInfo").text(`Sorry ${curPlayer.name}, the actual card drawn was the ${curCard.value} of ${curCard.suit}. It is now ${player1.name}'s turn`);
-                                curPlayer = player1;
-                                rowOutline(curPlayer);
-                            }
-                            break;
-                        case (counter === 3):
-                            $("#cardInfo").text(`Sorry ${curPlayer.name}, the actual card drawn was the ${curCard.value} of ${curCard.suit}.`);
-                            counter = 1;
-                            $("#begin").show();
-                            $(".phs2Btn").hide();
-                            $("#player1").css("border", "none");
-                            $("#player2").css("border", "none");
-                            break;
-                    }
+                        switch (true) {
+                            case (counter < 3):
+                                if (curPlayer.id === 1) {
+                                    $("#cardInfo").text(`Sorry ${curPlayer.name}, the actual card drawn was the ${curCard.value} of ${curCard.suit}. It is now ${player2.name}'s turn`);
+                                    curPlayer = player2;
+                                    rowOutline(curPlayer);
+                                } else {
+                                    $("#cardInfo").text(`Sorry ${curPlayer.name}, the actual card drawn was the ${curCard.value} of ${curCard.suit}. It is now ${player1.name}'s turn`);
+                                    curPlayer = player1;
+                                    rowOutline(curPlayer);
+                                }
+                                break;
+                            case (counter === 3):
+                                $("#cardInfo").text(`Sorry ${curPlayer.name}, the actual card drawn was the ${curCard.value} of ${curCard.suit}.`);
+                                counter = 1;
+                                $("#begin").show();
+                                $(".phs2Btn").hide();
+                                $("#player1").css("border", "none");
+                                $("#player2").css("border", "none");
+                                break;
+                        }
                     curPlayer.replaceable = true;
-
                     if (curPlayer.cardArray.length === 0) {
                         beginRow(curPlayer);
                     };
