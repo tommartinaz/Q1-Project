@@ -151,8 +151,8 @@ $("#begin").click(function () {
     var ranNum = Math.floor(Math.random() * 100 + 1);
     guesserID++;
     if (guesserID % 2 === 1) {
-        guessVal = prompt(player1.name + ", please guess a number between 1 and 100.");
-        guessValOther = prompt(player2.name + ", " + player1.name + "'s guess was " + guessVal + ". Do you think the number is higher or lower than that?");
+        guessVal = prompt(`${player1.name}, please guess a number between 1 and 100.`);
+        guessValOther = prompt(`${player2.name}, do you think the number will be higher or lower than ${guessVal}?`);
         if ((ranNum < guessVal && guessValOther === "lower") || (ranNum > guessVal && guessValOther === "higher")) {
             curPlayer = player2;
             rowOutline(curPlayer);
@@ -162,7 +162,7 @@ $("#begin").click(function () {
         }
     } else {
         guessVal = prompt(player2.name + ", please guess a number between 1 and 100.");
-        guessValOther = prompt(player1.name + ", " + player2.name + "'s guess was " + guessVal + ". Do you think the number is higher or lower than that?");
+        guessValOther = prompt(`${player1.name}, do you think the number will be higher or lower than ${guessVal}?`);
         if ((ranNum < guessVal && guessValOther === "lower") || (ranNum > guessVal && guessValOther === "higher")) {
             curPlayer = player1;
             rowOutline(curPlayer);
