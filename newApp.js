@@ -44,7 +44,6 @@ function Deck(deckID) {
             console.log("shuffled")
         });
     }
-
     this.drawCard = function () {
         return $.ajax({
             url: "https://deckofcardsapi.com/api/deck/" + deckID + "/draw/?count=1",
@@ -79,10 +78,12 @@ function resetCards(player) {
     $(".rowCards").css("border", "none");
     $("#begin").show();
     $(".phs2Btn").hide();
+    $("#player1").css("border", "none");
+    $("#player2").css("border", "none");
+    $("#reset").hide();
 };
 
 function drawCardsOnScreen(player, card, slot) {
-
     $(player.rowID + slot).css({
         'background-image': 'url("' + card.image + '")'
     });
@@ -102,26 +103,25 @@ function redrawCardBacks(player, slot) {
     }
 };
 
-
 function compareCards(arr, indx, btn) {
     if (btn === "higher" && arr[indx] < arr[indx + 1] || btn === "lower" && arr[indx] > arr[indx + 1]) {
-        //alert("That's right!");
         indx++;
         return indx;
     } else {
-        //alert("Sorry, wrong answer");
         return 0;
     }
 }
 
 function checkForWinner(player) {
     if (player.cardArray.length === 5) {
-        alert(player.name + " wins this round!");
-        resetCards(player);
+        $("#cardInfo").text(player.name + " wins this round!");
+        $(".phs2Btn").hide();
+        $("#reset").show();
+        $("#reset").click(function() {
+            resetCards(player);
+        })
     }
 }
-
-
 
 function beginRow(player) {
 
@@ -134,9 +134,15 @@ function beginRow(player) {
             'border': '3px solid blue',
             'border-radius': '10px'
         });
-
     });
 };
+
+function rowOutline(player) {
+    $("#player1").css("border", "none");
+    $("#player2").css("border", "none");
+    $("#player" + player.id).css({"border": "1px solid red", "border-radius": "10px"});
+}
+
 $("#begin").click(function () {
     $("#cardInfo").text('');
     var ranNum = Math.floor(Math.random() * 100 + 1);
@@ -145,33 +151,38 @@ $("#begin").click(function () {
         guessVal = prompt(player1.name + ", please guess a number between 1 and 100.");
         guessValOther = prompt(player2.name + ", " + player1.name + "'s guess was " + guessVal + ". Do you think the number is higher or lower than that?");
         if ((ranNum < guessVal && guessValOther === "lower") || (ranNum > guessVal && guessValOther === "higher")) {
-            alert(player2.name + ", the actual number was " + ranNum + ". You go first");
+            $("#cardInfo").text(`The actual number was ${ranNum}. ${player2.name} goes first.`);
             curPlayer = player2;
+            rowOutline(curPlayer);
         } else {
-            alert(player1.name + ", the actual number was " + ranNum + ". You go first");
+            $("#cardInfo").text(`The actual number was ${ranNum}. ${player1.name} goes first.`);
             curPlayer = player1;
+            rowOutline(curPlayer);
         }
     } else {
         guessVal = prompt(player2.name + ", please guess a number between 1 and 100.");
         guessValOther = prompt(player1.name + ", " + player2.name + "'s guess was " + guessVal + ". Do you think the number is higher or lower than that?");
         if ((ranNum < guessVal && guessValOther === "lower") || (ranNum > guessVal && guessValOther === "higher")) {
-            alert(player1.name + ", the actual number was " + ranNum + ". You go first");
+            $("#cardInfo").text(`The actual number was ${ranNum}. ${player1.name} goes first.`);
             curPlayer = player1;
+            rowOutline(curPlayer);
         } else {
-            alert(player2.name + ", the actual number was " + ranNum + ". You go first");
+            $("#cardInfo").text(`The actual number was ${ranNum}. ${player2.name} goes first.`);
             curPlayer = player2;
+            rowOutline(curPlayer);
         }
     }
     if (curPlayer.cardArray.length === 0) {
         beginRow(curPlayer);
+        rowOutline(curPlayer);
     }
     $(".phs2Btn").show();
 
     $("#begin").hide();
 })
-$(".phs2Btn").click(function () {
-    console.log($(event.target));
 
+$(".phs2Btn").click(function () {
+    //console.log($(event.target));
     var btnValue = $(event.target).attr("value");
     var cardSlot = curPlayer.frozenIndex + 1 + tempIndex;
     switch (btnValue) {
@@ -181,7 +192,6 @@ $(".phs2Btn").click(function () {
                 drawCardsOnScreen(curPlayer, curCard, cardSlot + 1);
                 curPlayer.cardArray.push(deckMapping[curPlayer.deck.curCard.value]);
                 //console.log("btnValue is: " + btnValue + "\ncurVal is: " + curVal + "\nnext card val is: " + nextCardVal);
-
                 if (compareCards(curPlayer.cardArray, curPlayer.frozenIndex + tempIndex, btnValue)) {
                     tempIndex++;
                     $("#cardInfo").text('');
@@ -191,14 +201,17 @@ $(".phs2Btn").click(function () {
                     counter++;
                     redrawCardBacks(curPlayer, curPlayer.frozenIndex + 2);
                     curPlayer.cardArray = curPlayer.cardArray.slice(0, curPlayer.frozenIndex + 1);
+                    curPlayer.replaceable = true;
                     switch (true) {
                         case (counter < 3):
                             if (curPlayer.id === 1) {
                                 $("#cardInfo").text(`Sorry ${curPlayer.name}, the actual card drawn was the ${curCard.value} of ${curCard.suit}. It is now ${player2.name}'s turn`);
                                 curPlayer = player2;
+                                rowOutline(curPlayer);
                             } else {
                                 $("#cardInfo").text(`Sorry ${curPlayer.name}, the actual card drawn was the ${curCard.value} of ${curCard.suit}. It is now ${player1.name}'s turn`);
                                 curPlayer = player1;
+                                rowOutline(curPlayer);
                             }
                             break;
                         case (counter === 3):
@@ -206,6 +219,8 @@ $(".phs2Btn").click(function () {
                             counter = 1;
                             $("#begin").show();
                             $(".phs2Btn").hide();
+                            $("#player1").css("border", "none");
+                            $("#player2").css("border", "none");
                             break;
                     }
                     curPlayer.replaceable = true;
@@ -213,11 +228,11 @@ $(".phs2Btn").click(function () {
                     if (curPlayer.cardArray.length === 0) {
                         beginRow(curPlayer);
                     };
-
                 }
-                console.log(tempIndex);
+                //console.log(tempIndex);
             });
             break;
+
         case "freeze":
             console.log("Frozen");
             $(".rowCards" + curPlayer.id).css('border', 'none');
@@ -231,11 +246,14 @@ $(".phs2Btn").click(function () {
             counter = 1;
             $(".phs2Btn").hide();
             $("#begin").show();
+            $("#player1").css("border", "none");
+            $("#player2").css("border", "none");
             break;
+
         case "replace":
             console.log("Replacing");
             if (tempIndex > 0 || curPlayer.replaceable === false) {
-                alert("Sorry, you can only replace the frozen card, and only once per turn in this phase.");
+                $("#cardInfo").text("Sorry, you can only replace the frozen card, and only once per turn in this phase.");
                 break;
             } else {
                 curPlayer.deck.drawCard().then(function () {
@@ -251,5 +269,3 @@ $(".phs2Btn").click(function () {
 
 player1 = new Player(1, prompt("Please enter the name of player 1", "Player1"), new Deck('268n4fwya9nq'));
 player2 = new Player(2, prompt("Please enter the name of player 2", "Player2"), new Deck("gzajszt1jhvy"));
-
-//console.log(player1, player2);
