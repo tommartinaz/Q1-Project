@@ -79,7 +79,7 @@ header {
   background-size: contain;
   background-repeat: no-repeat;
   float: left;
-  margin: 3px 5px;
+  margin: 3px 10px;
 }
 .rowCards2 {
   background-image: url('images/The_Spoils_back.jpg');
@@ -141,6 +141,6 @@ footer {
 }
 
 .cardDisp {
-  width: 78%;
+  width: 84%;
   margin: 0px auto;
 }
