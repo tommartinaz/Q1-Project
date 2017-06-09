@@ -44,7 +44,6 @@ header {
 #playArea {
   height: 100%;
   position: relative;
-  border: 1px solid black;
 }
 
 #player1 {
