@@ -18,29 +18,33 @@
 </head>
 
 <body>
-  <div class="container">
-    <section class="phase2Left col-md-3">
+  <div class="container-fluid">
+    <section class="phase2Left col-md-4">
       <img src="images/Card_Sharks.png">
       <div id="cardInfo"></div>
     </section>
-    <div id="playArea" class="col-md-9">
+    <div id="playArea" class="col-md-8">
       <button type="button" id="begin" name="button">Click here to start the round</button>
       <button type="button" id="reset">Reset cards for next round</button>
+      <button type="button" id="continue">Continue</button>
       <div id="player1" class="row">
-
-        <div id="p1s1" class="rowCards rowCards1 col-md-2 col-md-offset-1">
+        <div class="cardDisp">
+          <div id="p1s1" class="rowCards rowCards1 col-md-2">
+          </div>
+          <div id="p1s2" class="rowCards rowCards1 col-md-2"></div>
+          <div id="p1s3" class="rowCards rowCards1 col-md-2"></div>
+          <div id="p1s4" class="rowCards rowCards1 col-md-2"></div>
+          <div id="p1s5" class="rowCards rowCards1 col-md-2"></div>
         </div>
-        <div id="p1s2" class="rowCards rowCards1 col-md-2"></div>
-        <div id="p1s3" class="rowCards rowCards1 col-md-2"></div>
-        <div id="p1s4" class="rowCards rowCards1 col-md-2"></div>
-        <div id="p1s5" class="rowCards rowCards1 col-md-2"></div>
       </div>
       <div id="player2" class="row" label="Player 2">
-        <div id="p2s1" class="rowCards rowCards2 col-md-2 col-md-offset-1"></div>
-        <div id="p2s2" class="rowCards rowCards2 col-md-2"></div>
-        <div id="p2s3" class="rowCards rowCards2 col-md-2"></div>
-        <div id="p2s4" class="rowCards rowCards2 col-md-2"></div>
-        <div id="p2s5" class="rowCards rowCards2 col-md-2"></div>
+        <div class="cardDisp">
+          <div id="p2s1" class="rowCards rowCards2 col-md-2"></div>
+          <div id="p2s2" class="rowCards rowCards2 col-md-2"></div>
+          <div id="p2s3" class="rowCards rowCards2 col-md-2"></div>
+          <div id="p2s4" class="rowCards rowCards2 col-md-2"></div>
+          <div id="p2s5" class="rowCards rowCards2 col-md-2"></div>
+        </div>
       </div>
     </div>
     <div class="phase2ButtonRow">
